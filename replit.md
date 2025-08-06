@@ -35,8 +35,11 @@ The application uses Drizzle ORM with PostgreSQL dialect and includes tables for
 ## Key Features
 - **Product Catalog**: Separate categories for cuttings and seedlings with detailed product information
 - **Shopping Cart**: Persistent cart with quantity management and stock validation
-- **Checkout Process**: Form-based ordering with delivery/pickup options
+- **Checkout Process**: Form-based ordering with safe delivery/pickup options
+- **Pickup Locations**: Comprehensive list of secure pickup hotspots with detailed location information
+- **Anonymous Chat**: Real-time customer support chat with complete anonymity and privacy protection
 - **Contact System**: Customer inquiry forms with order type specification
+- **Safety-Focused Design**: Emphasis on safe meeting locations and customer security
 - **Responsive Design**: Mobile-first design with smooth scrolling navigation
 
 # External Dependencies

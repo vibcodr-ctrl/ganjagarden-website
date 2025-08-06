@@ -6,9 +6,11 @@ import SeedlingsSection from "@/components/seedlings-section";
 import WhyChooseUs from "@/components/why-choose-us";
 import OrderProcess from "@/components/order-process";
 import SafetySection from "@/components/safety-section";
+import PickupLocations from "@/components/pickup-locations";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import CartOverlay from "@/components/cart-overlay";
+import AnonymousChat from "@/components/anonymous-chat";
 import { CartProvider } from "@/hooks/use-cart";
 
 export default function Home() {
@@ -17,6 +19,7 @@ export default function Home() {
       <div className="min-h-screen bg-white">
         <Header />
         <CartOverlay />
+        <AnonymousChat />
         <main>
           <Hero />
           <ProductCategories />
@@ -25,6 +28,7 @@ export default function Home() {
           <WhyChooseUs />
           <OrderProcess />
           <SafetySection />
+          <PickupLocations />
           <ContactSection />
         </main>
         <Footer />

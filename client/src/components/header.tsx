@@ -51,6 +51,13 @@ export default function Header() {
               Seedlings
             </button>
             <button 
+              onClick={() => scrollToSection('pickup-locations')} 
+              className="text-gray-700 hover:text-forest-green transition-colors"
+              data-testid="nav-pickup"
+            >
+              Pickup Locations
+            </button>
+            <button 
               onClick={() => scrollToSection('about')} 
               className="text-gray-700 hover:text-forest-green transition-colors"
               data-testid="nav-about"
@@ -120,6 +127,13 @@ export default function Header() {
                 data-testid="nav-mobile-seedlings"
               >
                 Seedlings
+              </button>
+              <button 
+                onClick={() => scrollToSection('pickup-locations')} 
+                className="text-gray-700 hover:text-forest-green transition-colors py-2 text-left"
+                data-testid="nav-mobile-pickup"
+              >
+                Pickup Locations
               </button>
               <button 
                 onClick={() => scrollToSection('about')} 

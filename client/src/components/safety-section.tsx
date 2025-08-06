@@ -67,11 +67,18 @@ export default function SafetySection() {
               </div>
               
               <div className="border-l-4 border-sage-green pl-4">
-                <h4 className="font-semibold text-gray-900 mb-2">Pickup Hotspots</h4>
-                <p className="text-gray-600 text-sm">
-                  Choose from our established network of secure pickup locations. 
-                  We'll provide you with a list of available hotspots in your area after you place an order.
+                <h4 className="font-semibold text-gray-900 mb-2">Secure Pickup Hotspots</h4>
+                <p className="text-gray-600 text-sm mb-3">
+                  Choose from our established network of secure pickup locations:
                 </p>
+                <div className="space-y-1 text-xs text-gray-500">
+                  <div>• Downtown Mall Parking - Level 2 (West Side)</div>
+                  <div>• Riverside Park - Main Entrance Lot</div>
+                  <div>• Metro Station Plaza - Coffee Shop Area</div>
+                  <div>• Shopping Center - Food Court Parking</div>
+                  <div>• Community Center - Back Parking Lot</div>
+                  <div className="text-forest-green font-medium mt-2">+ More locations available upon request</div>
+                </div>
               </div>
             </div>
             
