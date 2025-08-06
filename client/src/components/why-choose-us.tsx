@@ -22,8 +22,8 @@ export default function WhyChooseUs() {
             <div className="bg-mint-green rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
               <Truck className="text-3xl text-forest-green" size={32} />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Safe Delivery</h3>
-            <p className="text-gray-600">Secure and discreet delivery to your location or convenient pickup spots. We ensure your plants arrive healthy and undamaged.</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Safe & Flexible Delivery</h3>
+            <p className="text-gray-600">Choose your preferred safe meeting location - whether it's your home, a parking lot, or one of our secure pickup hotspots. We prioritize your safety and discretion while ensuring your plants arrive healthy.</p>
           </div>
 
           <div className="text-center">

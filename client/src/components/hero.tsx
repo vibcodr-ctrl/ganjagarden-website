@@ -19,7 +19,7 @@ export default function Hero() {
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
               Professional-grade cannabis cuttings and seedlings grown with care. 
-              Perfect genetics, healthy plants, delivered fresh to your location.
+              Perfect genetics, healthy plants, delivered to your chosen safe location or available at our secure pickup hotspots.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 

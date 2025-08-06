@@ -5,6 +5,7 @@ import FeaturedProducts from "@/components/featured-products";
 import SeedlingsSection from "@/components/seedlings-section";
 import WhyChooseUs from "@/components/why-choose-us";
 import OrderProcess from "@/components/order-process";
+import SafetySection from "@/components/safety-section";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import CartOverlay from "@/components/cart-overlay";
@@ -23,6 +24,7 @@ export default function Home() {
           <SeedlingsSection />
           <WhyChooseUs />
           <OrderProcess />
+          <SafetySection />
           <ContactSection />
         </main>
         <Footer />

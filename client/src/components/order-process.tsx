@@ -28,8 +28,8 @@ export default function OrderProcess() {
             <div className="bg-white bg-opacity-20 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
               <span className="text-2xl font-bold">3</span>
             </div>
-            <h3 className="text-lg font-bold mb-2">Choose Delivery</h3>
-            <p className="text-green-100">Select home delivery or pickup location that works for you</p>
+            <h3 className="text-lg font-bold mb-2">Choose Safe Meeting</h3>
+            <p className="text-green-100">Select any safe location for delivery or choose from our secure pickup hotspots</p>
           </div>
 
           <div className="text-center">

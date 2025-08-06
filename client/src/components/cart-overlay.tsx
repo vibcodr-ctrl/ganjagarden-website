@@ -294,8 +294,8 @@ export default function CartOverlay() {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="delivery">Home Delivery</SelectItem>
-                          <SelectItem value="pickup">Pickup Location</SelectItem>
+                          <SelectItem value="delivery">Safe Location Delivery</SelectItem>
+                          <SelectItem value="pickup">Secure Pickup Hotspot</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -309,10 +309,10 @@ export default function CartOverlay() {
                     name="deliveryAddress"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Delivery Address</FormLabel>
+                        <FormLabel>Safe Meeting Location</FormLabel>
                         <FormControl>
                           <Textarea
-                            placeholder="Enter your full delivery address"
+                            placeholder="Enter any safe location - your home address, parking lot, shopping center, etc. We prioritize your safety and discretion."
                             {...field}
                             data-testid="textarea-delivery-address"
                           />
@@ -329,10 +329,10 @@ export default function CartOverlay() {
                     name="pickupLocation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Pickup Location</FormLabel>
+                        <FormLabel>Preferred Pickup Hotspot</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Preferred pickup location or meeting spot"
+                            placeholder="Choose from our secure pickup hotspots (list will be provided) or suggest a safe meeting location"
                             {...field}
                             data-testid="input-pickup-location"
                           />
