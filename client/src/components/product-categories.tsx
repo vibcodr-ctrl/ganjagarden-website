@@ -24,7 +24,7 @@ export default function ProductCategories() {
           {/* Cuttings Category */}
           <Card className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
             <img 
-              src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+              src="https://images.pexels.com/photos/6663579/pexels-photo-6663579.jpeg?auto=compress&cs=tinysrgb&w=600&h=400" 
               alt="Cannabis cuttings with healthy root systems" 
               className="w-full h-64 object-cover"
             />
@@ -61,7 +61,7 @@ export default function ProductCategories() {
           {/* Seedlings Category */}
           <Card className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
             <img 
-              src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400" 
+              src="https://images.pexels.com/photos/6663567/pexels-photo-6663567.jpeg?auto=compress&cs=tinysrgb&w=600&h=400" 
               alt="Young cannabis seedlings in nursery pots" 
               className="w-full h-64 object-cover"
             />

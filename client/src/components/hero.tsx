@@ -41,8 +41,8 @@ export default function Hero() {
           </div>
           <div className="relative">
             <img 
-              src="https://pixabay.com/get/g04935de2b24d4ada2a06e9f81e92b6382f994437f172c2b376f6cbc6277339e7c7d1b77eddf0ab7ef681f81bc9dff0449ab9dee75cac26df37d7e12cb4c83967_1280.jpg" 
-              alt="Professional cannabis growing facility" 
+              src="https://images.pexels.com/photos/6480102/pexels-photo-6480102.jpeg?auto=compress&cs=tinysrgb&w=800&h=600" 
+              alt="Professional cannabis growing facility with healthy plants" 
               className="rounded-2xl shadow-2xl w-full"
             />
           </div>
