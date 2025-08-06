@@ -63,7 +63,7 @@ export class MemStorage implements IStorage {
         price: "25.00",
         stock: 12,
         category: "cutting",
-        imageUrl: "https://images.pexels.com/photos/6663585/pexels-photo-6663585.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/3536257/pexels-photo-3536257.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "Purple Kush",
         genetics: "indica"
       },
@@ -74,7 +74,7 @@ export class MemStorage implements IStorage {
         price: "30.00",
         stock: 8,
         category: "cutting",
-        imageUrl: "https://images.pexels.com/photos/6663566/pexels-photo-6663566.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/2731663/pexels-photo-2731663.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "Green Crack",
         genetics: "sativa"
       },
@@ -85,7 +85,7 @@ export class MemStorage implements IStorage {
         price: "28.00",
         stock: 15,
         category: "cutting",
-        imageUrl: "https://images.pexels.com/photos/7261467/pexels-photo-7261467.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/2731667/pexels-photo-2731667.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "OG Kush",
         genetics: "hybrid"
       },
@@ -97,7 +97,7 @@ export class MemStorage implements IStorage {
         price: "15.00",
         stock: 20,
         category: "seedling",
-        imageUrl: "https://images.pexels.com/photos/6480101/pexels-photo-6480101.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/4543134/pexels-photo-4543134.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "Blue Dream",
         genetics: "hybrid"
       },
@@ -108,7 +108,7 @@ export class MemStorage implements IStorage {
         price: "18.00",
         stock: 14,
         category: "seedling",
-        imageUrl: "https://images.pexels.com/photos/7261468/pexels-photo-7261468.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/2753946/pexels-photo-2753946.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "White Widow",
         genetics: "hybrid"
       },
@@ -119,7 +119,7 @@ export class MemStorage implements IStorage {
         price: "20.00",
         stock: 9,
         category: "seedling",
-        imageUrl: "https://images.pexels.com/photos/6480098/pexels-photo-6480098.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/1466335/pexels-photo-1466335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "Sour Diesel",
         genetics: "sativa"
       },
@@ -130,7 +130,7 @@ export class MemStorage implements IStorage {
         price: "16.00",
         stock: 25,
         category: "seedling",
-        imageUrl: "https://images.pexels.com/photos/6663574/pexels-photo-6663574.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+        imageUrl: "https://images.pexels.com/photos/3676962/pexels-photo-3676962.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
         strain: "Northern Lights",
         genetics: "indica"
       }
