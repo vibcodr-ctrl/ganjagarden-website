@@ -10,7 +10,8 @@ import PickupLocations from "@/components/pickup-locations";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import CartOverlay from "@/components/cart-overlay";
-import AnonymousChat from "@/components/anonymous-chat";
+import ShopScene from "@/components/shop-scene";
+import ShopAssistant from "@/components/shop-assistant";
 import { CartProvider } from "@/hooks/use-cart";
 
 export default function Home() {
@@ -19,9 +20,10 @@ export default function Home() {
       <div className="min-h-screen bg-white">
         <Header />
         <CartOverlay />
-        <AnonymousChat />
+        <ShopAssistant />
         <main>
           <Hero />
+          <ShopScene />
           <ProductCategories />
           <FeaturedProducts />
           <SeedlingsSection />

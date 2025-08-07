@@ -8,9 +8,19 @@ import {
   type OrderItem,
   type InsertOrderItem,
   type Contact,
-  type InsertContact
+  type InsertContact,
+  type ChatSession,
+  type InsertChatSession,
+  type ChatMessage,
+  type InsertChatMessage
 } from "@shared/schema";
 import { randomUUID } from "crypto";
+import { db } from "./db";
+import { eq, desc } from "drizzle-orm";
+import { 
+  users, products, orders, orderItems, contacts, 
+  chatSessions, chatMessages
+} from "@shared/schema";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -33,6 +43,15 @@ export interface IStorage {
   
   createContact(contact: InsertContact): Promise<Contact>;
   getContacts(): Promise<Contact[]>;
+  
+  // Chat session operations
+  createChatSession(insertSession: InsertChatSession): Promise<ChatSession>;
+  getChatSession(id: string): Promise<ChatSession | undefined>;
+  updateChatSessionStatus(id: string, status: string, adminId?: string): Promise<ChatSession>;
+
+  // Chat message operations
+  createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage>;
+  getChatMessages(sessionId: string): Promise<ChatMessage[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -245,6 +264,250 @@ export class MemStorage implements IStorage {
   async getContacts(): Promise<Contact[]> {
     return Array.from(this.contacts.values());
   }
+
+  // Chat session operations
+  async createChatSession(insertSession: InsertChatSession): Promise<ChatSession> {
+    const session: ChatSession = {
+      id: randomUUID(),
+      ...insertSession,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    // For MemStorage, we'll store in memory (in a real app this would use database)
+    return session;
+  }
+
+  async getChatSession(id: string): Promise<ChatSession | undefined> {
+    // Placeholder implementation
+    return undefined;
+  }
+
+  async updateChatSessionStatus(id: string, status: string, adminId?: string): Promise<ChatSession> {
+    // Placeholder implementation
+    throw new Error("Not implemented");
+  }
+
+  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
+    const message: ChatMessage = {
+      id: randomUUID(),
+      ...insertMessage,
+      createdAt: new Date(),
+    };
+    // For MemStorage, we'll store in memory (in a real app this would use database)
+    return message;
+  }
+
+  async getChatMessages(sessionId: string): Promise<ChatMessage[]> {
+    // Placeholder implementation
+    return [];
+  }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  async getUser(id: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async getProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getProduct(id: string): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product;
+  }
+
+  async getProductsByCategory(category: string): Promise<Product[]> {
+    return await db.select().from(products).where(eq(products.category, category));
+  }
+
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const [product] = await db.insert(products).values(insertProduct).returning();
+    return product;
+  }
+
+  async updateProductStock(id: string, stock: number): Promise<Product | undefined> {
+    const [product] = await db.update(products)
+      .set({ stock })
+      .where(eq(products.id, id))
+      .returning();
+    return product;
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const [order] = await db.insert(orders).values(insertOrder).returning();
+    return order;
+  }
+
+  async getOrder(id: string): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order;
+  }
+
+  async getOrders(): Promise<Order[]> {
+    return await db.select().from(orders).orderBy(desc(orders.createdAt));
+  }
+
+  async updateOrderStatus(id: string, status: string): Promise<Order | undefined> {
+    const [order] = await db.update(orders)
+      .set({ status })
+      .where(eq(orders.id, id))
+      .returning();
+    return order;
+  }
+
+  async createOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
+    const [orderItem] = await db.insert(orderItems).values(insertOrderItem).returning();
+    return orderItem;
+  }
+
+  async getOrderItems(orderId: string): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  }
+
+  async createContact(insertContact: InsertContact): Promise<Contact> {
+    const [contact] = await db.insert(contacts).values(insertContact).returning();
+    return contact;
+  }
+
+  async getContacts(): Promise<Contact[]> {
+    return await db.select().from(contacts).orderBy(desc(contacts.createdAt));
+  }
+
+  // Chat session operations
+  async createChatSession(insertSession: InsertChatSession): Promise<ChatSession> {
+    const [session] = await db.insert(chatSessions).values(insertSession).returning();
+    return session;
+  }
+
+  async getChatSession(id: string): Promise<ChatSession | undefined> {
+    const [session] = await db.select().from(chatSessions).where(eq(chatSessions.id, id));
+    return session;
+  }
+
+  async updateChatSessionStatus(id: string, status: string, adminId?: string): Promise<ChatSession> {
+    const [session] = await db.update(chatSessions)
+      .set({ status, adminId, updatedAt: new Date() })
+      .where(eq(chatSessions.id, id))
+      .returning();
+    return session;
+  }
+
+  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
+    const [message] = await db.insert(chatMessages).values(insertMessage).returning();
+    return message;
+  }
+
+  async getChatMessages(sessionId: string): Promise<ChatMessage[]> {
+    return await db.select()
+      .from(chatMessages)
+      .where(eq(chatMessages.sessionId, sessionId))
+      .orderBy(chatMessages.createdAt);
+  }
+}
+
+export const storage = new DatabaseStorage();
+
+// Initialize sample products in database
+async function initializeProducts() {
+  try {
+    const existingProducts = await storage.getProducts();
+    if (existingProducts.length === 0) {
+      // Sample cannabis products with actual cannabis images
+      const sampleProducts = [
+        {
+          name: "Purple Kush Cutting",
+          description: "Premium indica cutting with deep purple hues and relaxing effects.",
+          price: "25.00",
+          stock: 12,
+          category: "cutting",
+          imageUrl: "https://images.pexels.com/photos/3536257/pexels-photo-3536257.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "Purple Kush",
+          genetics: "indica"
+        },
+        {
+          name: "Green Crack Cutting", 
+          description: "Energizing sativa cutting perfect for daytime cultivation.",
+          price: "30.00",
+          stock: 8,
+          category: "cutting",
+          imageUrl: "https://images.pexels.com/photos/2731663/pexels-photo-2731663.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "Green Crack",
+          genetics: "sativa"
+        },
+        {
+          name: "OG Kush Cutting",
+          description: "Classic hybrid cutting with balanced effects and robust growth.",
+          price: "28.00", 
+          stock: 15,
+          category: "cutting",
+          imageUrl: "https://images.pexels.com/photos/2731667/pexels-photo-2731667.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "OG Kush",
+          genetics: "hybrid"
+        },
+        {
+          name: "Blue Dream Seedling",
+          description: "Balanced hybrid with sweet berry aroma.",
+          price: "15.00",
+          stock: 20,
+          category: "seedling",
+          imageUrl: "https://images.pexels.com/photos/4543134/pexels-photo-4543134.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "Blue Dream", 
+          genetics: "hybrid"
+        },
+        {
+          name: "White Widow Seedling",
+          description: "Classic strain with resinous white trichomes.",
+          price: "18.00",
+          stock: 14,
+          category: "seedling",
+          imageUrl: "https://images.pexels.com/photos/2753946/pexels-photo-2753946.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "White Widow",
+          genetics: "hybrid"
+        },
+        {
+          name: "Sour Diesel Seedling",
+          description: "Energizing sativa with diesel aroma.",
+          price: "20.00",
+          stock: 9,
+          category: "seedling", 
+          imageUrl: "https://images.pexels.com/photos/1466335/pexels-photo-1466335.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "Sour Diesel",
+          genetics: "sativa"
+        },
+        {
+          name: "Northern Lights Seedling",
+          description: "Pure indica with relaxing effects.",
+          price: "16.00",
+          stock: 25,
+          category: "seedling",
+          imageUrl: "https://images.pexels.com/photos/3676962/pexels-photo-3676962.jpeg?auto=compress&cs=tinysrgb&w=400&h=300",
+          strain: "Northern Lights",
+          genetics: "indica"
+        }
+      ];
+
+      for (const product of sampleProducts) {
+        await storage.createProduct(product);
+      }
+      console.log('Sample products initialized in database');
+    }
+  } catch (error) {
+    console.error('Error initializing products:', error);
+  }
+}
+
+// Initialize products when storage is created
+initializeProducts();
