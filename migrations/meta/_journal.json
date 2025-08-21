@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1755771506836,
+      "tag": "0000_fresh_living_lightning",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1755779257416,
+      "tag": "0001_flippant_lenny_balinger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1755811180431,
+      "tag": "0002_tricky_nicolaos",
+      "breakpoints": true
+    }
+  ]
+}

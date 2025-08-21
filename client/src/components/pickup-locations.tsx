@@ -1,65 +1,45 @@
 import { MapPin, Clock, Shield, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
-const pickupLocations = [
-  {
-    id: 1,
-    name: "Downtown Mall Plaza",
-    address: "Level 2 Parking - West Side",
-    area: "Downtown",
-    hours: "9AM - 9PM",
-    description: "Near the main entrance, well-lit area with security cameras",
-    isPopular: true
-  },
-  {
-    id: 2,
-    name: "Riverside Park",
-    address: "Main Entrance Parking Lot",
-    area: "Riverside",
-    hours: "8AM - 8PM",
-    description: "Spacious parking with easy access, family-friendly area",
-    isPopular: true
-  },
-  {
-    id: 3,
-    name: "Metro Station Plaza",
-    address: "Coffee Shop Area - North Side",
-    area: "Metro District",
-    hours: "7AM - 10PM",
-    description: "High traffic area, multiple exit routes for convenience",
-    isPopular: false
-  },
-  {
-    id: 4,
-    name: "Westside Shopping Center",
-    address: "Food Court Parking Section B",
-    area: "West Side",
-    hours: "10AM - 9PM",
-    description: "Covered parking available, close to multiple businesses",
-    isPopular: true
-  },
-  {
-    id: 5,
-    name: "Community Recreation Center",
-    address: "Back Parking Lot - Staff Entrance",
-    area: "North End",
-    hours: "6AM - 10PM",
-    description: "Quiet location with regular security patrols",
-    isPopular: false
-  },
-  {
-    id: 6,
-    name: "University Campus",
-    address: "Visitor Parking - Building C",
-    area: "University District",
-    hours: "8AM - 6PM",
-    description: "Academic area with consistent foot traffic",
-    isPopular: false
-  }
-];
+interface PickupLocation {
+  id: string;
+  name: string;
+  district: string;
+  spot: string;
+  hours: string;
+  notes: string;
+  isPopular: boolean;
+  isActive: boolean;
+}
 
 export default function PickupLocations() {
+  const [locations, setLocations] = useState<PickupLocation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch('/api/locations');
+      if (response.ok) {
+        const data = await response.json();
+        // Only show active locations
+        const activeLocations = data.filter((loc: PickupLocation) => loc.isActive);
+        setLocations(activeLocations);
+      } else {
+        console.error('Failed to fetch locations');
+      }
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const scrollToContact = () => {
     const element = document.getElementById('contact');
     if (element) {
@@ -80,48 +60,55 @@ export default function PickupLocations() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {pickupLocations.map((location) => (
-            <Card 
-              key={location.id} 
-              className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
-                location.isPopular ? 'ring-2 ring-forest-green ring-opacity-20' : ''
-              }`}
-            >
-              {location.isPopular && (
-                <div className="absolute top-0 right-0 bg-forest-green text-white px-3 py-1 text-xs font-medium rounded-bl-lg">
-                  Popular
-                </div>
-              )}
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-3 mb-4">
-                  <div className="bg-mint-green rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="text-forest-green" size={20} />
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-forest-green mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading pickup locations...</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {locations.map((location) => (
+              <Card 
+                key={location.id} 
+                className={`relative overflow-hidden transition-all duration-300 hover:shadow-lg ${
+                  location.isPopular ? 'ring-2 ring-forest-green ring-opacity-20' : ''
+                }`}
+              >
+                {location.isPopular && (
+                  <div className="absolute top-0 right-0 bg-forest-green text-white px-3 py-1 text-xs font-medium rounded-bl-lg">
+                    Popular
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 mb-1">{location.name}</h3>
-                    <p className="text-sm text-gray-600">{location.area}</p>
+                )}
+                <CardContent className="p-6">
+                  <div className="flex items-start space-x-3 mb-4">
+                    <div className="bg-mint-green rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="text-forest-green" size={20} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-gray-900 mb-1">{location.name}</h3>
+                      <p className="text-sm text-gray-600">{location.district}</p>
+                    </div>
                   </div>
-                </div>
-                
-                <div className="space-y-2 text-sm text-gray-600">
-                  <div className="flex items-center space-x-2">
-                    <MapPin size={14} className="text-gray-400" />
-                    <span>{location.address}</span>
+                  
+                  <div className="space-y-2 text-sm text-gray-600">
+                    <div className="flex items-center space-x-2">
+                      <MapPin size={14} className="text-gray-400" />
+                      <span>{location.spot}</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Clock size={14} className="text-gray-400" />
+                      <span>{location.hours}</span>
+                    </div>
+                    <div className="flex items-start space-x-2">
+                      <Shield size={14} className="text-gray-400 mt-0.5" />
+                      <span className="text-xs">{location.notes}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Clock size={14} className="text-gray-400" />
-                    <span>{location.hours}</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <Shield size={14} className="text-gray-400 mt-0.5" />
-                    <span className="text-xs">{location.description}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         <div className="bg-mint-green rounded-2xl p-8 text-center">
           <div className="max-w-3xl mx-auto">

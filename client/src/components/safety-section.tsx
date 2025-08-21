@@ -1,6 +1,42 @@
 import { Shield, MapPin, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+
+interface PickupLocation {
+  id: string;
+  name: string;
+  district: string;
+  spot: string;
+  hours: string;
+  notes: string;
+  isPopular: boolean;
+  isActive: boolean;
+}
 
 export default function SafetySection() {
+  const [locations, setLocations] = useState<PickupLocation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchLocations();
+  }, []);
+
+  const fetchLocations = async () => {
+    try {
+      const response = await fetch('/api/locations');
+      if (response.ok) {
+        const data = await response.json();
+        // Only show active locations
+        const activeLocations = data.filter((loc: PickupLocation) => loc.isActive);
+        setLocations(activeLocations);
+      } else {
+        console.error('Failed to fetch locations');
+      }
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -72,12 +108,20 @@ export default function SafetySection() {
                   Choose from our established network of secure pickup locations:
                 </p>
                 <div className="space-y-1 text-xs text-gray-500">
-                  <div>• Downtown Mall Parking - Level 2 (West Side)</div>
-                  <div>• Riverside Park - Main Entrance Lot</div>
-                  <div>• Metro Station Plaza - Coffee Shop Area</div>
-                  <div>• Shopping Center - Food Court Parking</div>
-                  <div>• Community Center - Back Parking Lot</div>
-                  <div className="text-forest-green font-medium mt-2">+ More locations available upon request</div>
+                  {isLoading ? (
+                    <div className="text-gray-400">Loading locations...</div>
+                  ) : locations.length > 0 ? (
+                    <>
+                      {locations.slice(0, 5).map((location) => (
+                        <div key={location.id}>• {location.name} - {location.spot}</div>
+                      ))}
+                      {locations.length > 5 && (
+                        <div className="text-forest-green font-medium mt-2">+ {locations.length - 5} more locations available</div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-gray-400">Locations being updated...</div>
+                  )}
                 </div>
               </div>
             </div>

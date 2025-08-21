@@ -5,10 +5,214 @@ import {
   insertProductSchema,
   insertOrderSchema,
   insertOrderItemSchema,
-  insertContactSchema
+  insertContactSchema,
+  insertAdminUserSchema,
+  insertSiteContentSchema,
+  insertImageSchema
 } from "@shared/schema";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+// Middleware to verify admin JWT token
+const authenticateAdmin = (req: any, res: any, next: any) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Access token required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    req.admin = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+};
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Admin authentication routes
+  app.post('/api/admin/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password required' });
+      }
+
+      const admin = await storage.getAdminByUsername(username);
+      if (!admin || !admin.isActive) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      const isValidPassword = await bcrypt.compare(password, admin.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      // Update last login
+      await storage.updateAdminLastLogin(admin.id);
+
+      // Generate JWT token
+      const token = jwt.sign(
+        { id: admin.id, username: admin.username, role: admin.role },
+        process.env.JWT_SECRET || 'your-secret-key',
+        { expiresIn: '24h' }
+      );
+
+      res.json({ 
+        token, 
+        admin: { 
+          id: admin.id, 
+          username: admin.username, 
+          role: admin.role 
+        } 
+      });
+    } catch (error) {
+      console.error('Admin login error:', error);
+      res.status(500).json({ message: 'Login failed' });
+    }
+  });
+
+  // Admin product management routes
+  app.post('/api/admin/products', authenticateAdmin, async (req, res) => {
+    try {
+      const productData = insertProductSchema.parse(req.body);
+      const product = await storage.createProduct(productData);
+      res.json({ product, message: 'Product created successfully' });
+    } catch (error) {
+      console.error('Product creation error:', error);
+      res.status(400).json({ message: 'Failed to create product' });
+    }
+  });
+
+  app.put('/api/admin/products/:id', authenticateAdmin, async (req, res) => {
+    try {
+      const productData = insertProductSchema.parse(req.body);
+      const product = await storage.updateProduct(req.params.id, productData);
+      if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+      }
+      res.json({ product, message: 'Product updated successfully' });
+    } catch (error) {
+      console.error('Product update error:', error);
+      res.status(400).json({ message: 'Failed to update product' });
+    }
+  });
+
+  app.delete('/api/admin/products/:id', authenticateAdmin, async (req, res) => {
+    try {
+      await storage.deleteProduct(req.params.id);
+      res.json({ message: 'Product deleted successfully' });
+    } catch (error) {
+      console.error('Product deletion error:', error);
+      res.status(500).json({ message: 'Failed to delete product' });
+    }
+  });
+
+  // Admin content management routes
+  app.get('/api/admin/content', authenticateAdmin, async (req, res) => {
+    try {
+      const content = await storage.getAllSiteContent();
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch content' });
+    }
+  });
+
+  app.post('/api/admin/content', authenticateAdmin, async (req, res) => {
+    try {
+      const contentData = insertSiteContentSchema.parse(req.body);
+      const content = await storage.createSiteContent(contentData);
+      res.json({ content, message: 'Content created successfully' });
+    } catch (error) {
+      console.error('Content creation error:', error);
+      res.status(400).json({ message: 'Failed to create content' });
+    }
+  });
+
+  app.put('/api/admin/content/:id', authenticateAdmin, async (req, res) => {
+    try {
+      const contentData = insertSiteContentSchema.parse(req.body);
+      const content = await storage.updateSiteContent(req.params.id, contentData);
+      if (!content) {
+        return res.status(404).json({ message: 'Content not found' });
+      }
+      res.json({ content, message: 'Content updated successfully' });
+    } catch (error) {
+      console.error('Content update error:', error);
+      res.status(400).json({ message: 'Failed to update content' });
+    }
+  });
+
+  // Admin image management routes
+  app.get('/api/admin/images', authenticateAdmin, async (req, res) => {
+    try {
+      const images = await storage.getAllImages();
+      res.json(images);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch images' });
+    }
+  });
+
+  app.post('/api/admin/images', authenticateAdmin, async (req, res) => {
+    try {
+      const imageData = insertImageSchema.parse(req.body);
+      const image = await storage.createImage(imageData);
+      res.json({ image, message: 'Image uploaded successfully' });
+    } catch (error) {
+      console.error('Image upload error:', error);
+      res.status(400).json({ message: 'Failed to upload image' });
+    }
+  });
+
+  app.delete('/api/admin/images/:id', authenticateAdmin, async (req, res) => {
+    try {
+      await storage.deleteImage(req.params.id);
+      res.json({ message: 'Image deleted successfully' });
+    } catch (error) {
+      console.error('Image deletion error:', error);
+      res.status(500).json({ message: 'Failed to delete image' });
+    }
+  });
+
+  // Admin order management routes
+  app.get('/api/admin/orders', authenticateAdmin, async (req, res) => {
+    try {
+      const orders = await storage.getAllOrders();
+      res.json(orders);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch orders' });
+    }
+  });
+
+  app.put('/api/admin/orders/:id/status', authenticateAdmin, async (req, res) => {
+    try {
+      const { status } = req.body;
+      const order = await storage.updateOrderStatus(req.params.id, status);
+      if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
+      }
+      res.json({ order, message: 'Order status updated successfully' });
+    } catch (error) {
+      console.error('Order status update error:', error);
+      res.status(400).json({ message: 'Failed to update order status' });
+    }
+  });
+
+  // Public content routes for dynamic content
+  app.get('/api/content/:key', async (req, res) => {
+    try {
+      const content = await storage.getSiteContentByKey(req.params.key);
+      if (!content || !content.isActive) {
+        return res.status(404).json({ message: 'Content not found' });
+      }
+      res.json(content);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch content' });
+    }
+  });
+
   // Product routes
   app.get('/api/products', async (req, res) => {
     try {

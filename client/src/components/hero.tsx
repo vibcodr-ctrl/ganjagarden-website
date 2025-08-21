@@ -1,11 +1,18 @@
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function Hero() {
+  const [, setLocation] = useLocation();
+  
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const goToVirtualDispensary = () => {
+    setLocation('/virtual-dispensary');
   };
 
   return (
@@ -36,6 +43,12 @@ export default function Hero() {
                 data-testid="button-view-seedlings"
               >
                 View Seedlings
+              </Button>
+              <Button 
+                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                onClick={goToVirtualDispensary}
+              >
+                🌿 Virtual Dispensary
               </Button>
             </div>
           </div>

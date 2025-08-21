@@ -1,17 +1,15 @@
 import Header from "@/components/header";
 import Hero from "@/components/hero";
+import LandingChat from "@/components/landing-chat";
 import ProductCategories from "@/components/product-categories";
-import FeaturedProducts from "@/components/featured-products";
-import SeedlingsSection from "@/components/seedlings-section";
+import ProductCarousel from "@/components/product-carousel";
 import WhyChooseUs from "@/components/why-choose-us";
-import OrderProcess from "@/components/order-process";
 import SafetySection from "@/components/safety-section";
 import PickupLocations from "@/components/pickup-locations";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import CartOverlay from "@/components/cart-overlay";
-import ShopScene from "@/components/shop-scene";
-import ShopAssistant from "@/components/shop-assistant";
+import FloatingChatButton from "@/components/floating-chat-button";
 import { CartProvider } from "@/hooks/use-cart";
 
 export default function Home() {
@@ -20,15 +18,24 @@ export default function Home() {
       <div className="min-h-screen bg-white">
         <Header />
         <CartOverlay />
-        <ShopAssistant />
+        <FloatingChatButton />
         <main>
           <Hero />
-          <ShopScene />
-          <ProductCategories />
-          <FeaturedProducts />
-          <SeedlingsSection />
           <WhyChooseUs />
-          <OrderProcess />
+          <ProductCategories />
+          <ProductCarousel 
+            title="Featured Cuttings" 
+            subtitle="Our most popular and highest-quality cutting varieties"
+            category="cutting"
+            id="cuttings"
+          />
+          <ProductCarousel 
+            title="Premium Seedlings" 
+            subtitle="Fresh seedlings from top-tier genetics"
+            category="seedling"
+            id="seedlings"
+          />
+          <LandingChat />
           <SafetySection />
           <PickupLocations />
           <ContactSection />
