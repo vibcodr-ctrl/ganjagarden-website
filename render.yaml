@@ -3,7 +3,7 @@ services:
     name: ganjagarden-website
     env: node
     buildCommand: npm run build
-    startCommand: node server-static.js
+    startCommand: npm run start-static
     envVars:
       - key: NODE_ENV
         value: production
