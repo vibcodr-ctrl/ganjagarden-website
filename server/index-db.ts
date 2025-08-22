@@ -18,7 +18,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Serve static files from the build directory
-app.use(express.static(path.join(__dirname, '../dist/public')));
+app.use(express.static(path.join(__dirname, '../dist/public'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (path.endsWith('.html')) {
+      res.setHeader('Content-Type', 'text/html');
+    }
+  }
+}));
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -847,8 +857,14 @@ app.get('/api/admin/api-usage', async (req, res) => {
   }
 });
 
-// Catch-all route to serve the React app
+// Catch-all route to serve the React app (but not API routes)
 app.get('*', (req, res) => {
+  // Don't serve React app for API routes
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ message: 'API endpoint not found' });
+  }
+  
+  // Serve the React app for all other routes
   res.sendFile(path.join(__dirname, '../dist/public/index.html'));
 });
 

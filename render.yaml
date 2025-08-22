@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ganjagarden-website
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    routes:
+      - type: rewrite
+        source: /admin/*
+        destination: /index.html
+      - type: rewrite
+        source: /virtual-dispensary
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html

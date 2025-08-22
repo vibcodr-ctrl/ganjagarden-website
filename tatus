@@ -1,0 +1,5 @@
+[33m9c2417d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Add built files and GitHub Pages routing support - Include dist/ folder with built React app - Add 404.html for SPA routing support - Add redirect handling script to index.html
+[33mcf560ee[m Merge branch 'main' of https://github.com/vibcodr-ctrl/ganjagarden-website
+[33m9e16d14[m Add comprehensive documentation and improve project structure - Add detailed README.md with setup instructions - Add MIT LICENSE file - Update .gitignore for better file management - Clean up repository for GitHub
+[33m8515491[m Add files via upload
+[33m176d504[m Delete index.html
