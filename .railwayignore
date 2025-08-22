@@ -12,7 +12,7 @@ Thumbs.db
 *.tmp
 *.temp
 .cache/
-dist/
-build/
+# dist/  # Temporarily commented out for Render deployment
+# build/  # Temporarily commented out for Render deployment
 coverage/
 .nyc_output/
