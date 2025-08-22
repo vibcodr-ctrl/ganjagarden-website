@@ -11,10 +11,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files
+// Serve static files FIRST - this is crucial!
+app.use('/assets', express.static(path.join(__dirname, 'dist/public/assets')));
 app.use(express.static(path.join(__dirname, 'dist/public')));
 
-// Handle all routes by serving index.html
+// Handle all routes by serving index.html (but only after static files are checked)
 app.get('*', (req, res) => {
   console.log(`Serving index.html for route: ${req.path}`);
   res.sendFile(path.join(__dirname, 'dist/public/index.html'));
@@ -30,6 +31,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌐 Admin interface: http://localhost:${PORT}/admin/login`);
   console.log(`📁 Static files from: ${path.join(__dirname, 'dist/public')}`);
+  console.log(`📁 Assets from: ${path.join(__dirname, 'dist/public/assets')}`);
 });
 
 // Handle process errors
